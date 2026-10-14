@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🥛 우유 추천기</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --card: #ffffff;
+    --border: #e2e0d8;
+    --text: #1a1a1a;
+    --sub: #888;
+    --accent: #2d6a4f;
+    --accent-light: #e8f5ee;
+    --warn: #c0392b;
+    --warn-light: #fdecea;
+    --yellow: #f0a500;
+    --yellow-light: #fef6e0;
+    --radius: 14px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); font-family: 'Noto Sans KR', sans-serif; color: var(--text); min-height: 100vh; }
+  #app { max-width: 520px; margin: 0 auto; padding: 24px 16px 48px; }
+
+  /* SCREENS */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* TYPOGRAPHY */
+  .page-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .page-sub { font-size: 14px; color: var(--sub); margin-bottom: 24px; }
+  h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+
+  /* CARDS */
+  .card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 18px; margin-bottom: 12px; box-shadow: var(--shadow); }
+
+  /* BUTTONS */
+  .btn { display: block; width: 100%; padding: 14px; border-radius: var(--radius); font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; border: none; transition: all .15s; text-align: center; }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { opacity: .88; }
+  .btn-outline { background: white; border: 1.5px solid var(--border); color: var(--text); }
+  .btn-outline:hover { background: var(--bg); }
+  .btn-sm { width: auto; padding: 8px 16px; font-size: 13px; font-weight: 500; border-radius: 8px; }
+  .btn-back { background: none; border: none; font-family: inherit; font-size: 14px; color: var(--sub); cursor: pointer; padding: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 4px; }
+
+  /* HOME MODES */
+  .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .mode-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 22px 16px; text-align: center; cursor: pointer; transition: all .15s; box-shadow: var(--shadow); }
+  .mode-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .mode-card .icon { font-size: 36px; margin-bottom: 10px; }
+  .mode-card .label { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .mode-card .desc { font-size: 12px; color: var(--sub); line-height: 1.4; }
+
+  /* TOGGLES */
+  .pref-list { display: flex; flex-direction: column; gap: 0; }
+  .pref-row { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--border); }
+  .pref-row:last-child { border-bottom: none; }
+  .pref-info { display: flex; flex-direction: column; gap: 2px; }
+  .pref-label { font-size: 14px; font-weight: 500; }
+  .pref-hint { font-size: 11px; color: var(--sub); }
+  .toggle { width: 44px; height: 24px; border-radius: 99px; background: #ddd; position: relative; cursor: pointer; transition: background .2s; flex-shrink: 0; border: none; }
+  .toggle.on { background: var(--accent); }
+  .toggle::after { content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%; background: white; top: 3px; left: 3px; transition: left .2s; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
+  .toggle.on::after { left: 23px; }
+
+  /* RANGE */
+  .range-row { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+  .range-row input[type=range] { flex: 1; accent-color: var(--accent); }
+  .range-val { font-size: 15px; font-weight: 700; color: var(--accent); min-width: 16px; }
+
+  /* SCAN */
+  .scan-box { background: #111; border-radius: var(--radius); overflow: hidden; margin-bottom: 12px; min-height: 240px; display: flex; align-items: center; justify-content: center; }
+  #reader { width: 100% !important; }
+  #reader video { width: 100% !important; border-radius: 0 !important; }
+  .scan-placeholder { text-align: center; color: #888; padding: 40px 20px; }
+  .scan-placeholder .big { font-size: 48px; margin-bottom: 10px; }
+  .scan-input-row { display: flex; gap: 8px; }
+  .scan-input-row input { flex: 1; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 14px; background: white; }
+  .scan-input-row input:focus { outline: none; border-color: var(--accent); }
+
+  /* RESULT SCORE */
+  .score-hero { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .score-big { font-size: 48px; font-weight: 700; line-height: 1; }
+  .score-big.high { color: var(--accent); }
+  .score-big.mid { color: var(--yellow); }
+  .score-big.low { color: var(--warn); }
+  .score-badge { display: inline-block; padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; }
+  .badge-ok { background: var(--accent-light); color: var(--accent); }
+  .badge-mid { background: var(--yellow-light); color: var(--yellow); }
+  .badge-bad { background: var(--warn-light); color: var(--warn); }
+
+  /* WARN BOX */
+  .warn-box { background: var(--warn-light); border-left: 3px solid var(--warn); border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--warn); margin-bottom: 8px; }
+  .info-box { background: var(--accent-light); border-left: 3px solid var(--accent); border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--accent); margin-bottom: 12px; }
+
+  /* STAT GRID */
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0; }
+  .stat-cell { background: var(--bg); border-radius: 10px; padding: 10px 8px; text-align: center; }
+  .stat-val { font-size: 16px; font-weight: 700; }
+  .stat-lbl { font-size: 10px; color: var(--sub); margin-top: 2px; }
+
+  /* RANK LIST */
+  .rank-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .rank-item:last-child { border-bottom: none; }
+  .rank-num { font-size: 16px; font-weight: 700; color: var(--sub); min-width: 22px; }
+  .rank-num.gold { color: #c9952a; }
+  .rank-num.silver { color: #888; }
+  .rank-num.bronze { color: #a0674a; }
+  .rank-info { flex: 1; min-width: 0; }
+  .rank-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; }
+  .rank-bar-wrap { background: var(--border); border-radius: 99px; height: 7px; overflow: hidden; }
+  .rank-bar { height: 100%; border-radius: 99px; transition: width .5s ease; }
+  .bar-high { background: var(--accent); }
+  .bar-mid { background: var(--yellow); }
+  .bar-low { background: var(--warn); }
+  .rank-score { font-size: 13px; font-weight: 700; min-width: 36px; text-align: right; }
+
+  /* TAGS */
+  .tag { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 99px; font-weight: 700; margin-left: 4px; }
+  .tag-lacto { background: #e0f0ea; color: #1a6640; }
+  .tag-cur { background: var(--accent); color: white; }
+
+  /* TOP 3 CARDS */
+  .top3 { display: flex; flex-direction: column; gap: 10px; }
+  .top3-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all .15s; }
+  .top3-card:hover { border-color: var(--accent); }
+  .top3-card.rank1 { border-color: #c9952a; background: #fffcf2; }
+  .top3-medal { font-size: 28px; flex-shrink: 0; }
+  .top3-info { flex: 1; min-width: 0; }
+  .top3-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .top3-meta { font-size: 12px; color: var(--sub); }
+  .top3-score { font-size: 22px; font-weight: 700; }
+  .top3-score.high { color: var(--accent); }
+  .top3-score.mid { color: var(--yellow); }
+
+  /* LOADING */
+  .loading { display: flex; align-items: center; gap: 10px; padding: 16px; font-size: 14px; color: var(--sub); }
+  .spinner { width: 18px; height: 18px; border: 2.5px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+  .mb12 { margin-bottom: 12px; }
+  .mb20 { margin-bottom: 20px; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ───────── HOME ───────── -->
+  <div class="screen active" id="s-home">
+    <div style="text-align:center; padding: 20px 0 28px;">
+      <div style="font-size:48px; margin-bottom:8px;">🥛</div>
+      <div class="page-title">우유 추천기</div>
+      <div class="page-sub">내 몸에 맞는 우유를 찾아드려요</div>
+    </div>
+    <div class="mode-grid">
+      <div class="mode-card" onclick="goMode('recommend')">
+        <div class="icon">🎯</div>
+        <div class="label">선호도로 추천</div>
+        <div class="desc">조건을 설정하면<br>맞는 우유 Top3 추천</div>
+      </div>
+      <div class="mode-card" onclick="goMode('scan')">
+        <div class="icon">📷</div>
+        <div class="label">바코드 스캔</div>
+        <div class="desc">우유를 스캔하면<br>나한테 맞는지 분석</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>⚙️ 내 선호도 설정</h3>
+      <div class="pref-list" id="pref-home"></div>
+      <div style="margin-top:14px;">
+        <label style="font-size:13px; color:var(--sub); font-weight:500;">💰 가격 중요도</label>
+        <div class="range-row">
+          <input type="range" id="pw" min="0" max="5" value="2" step="1" oninput="document.getElementById('pwo').textContent=this.value">
+          <span class="range-val" id="pwo">2</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── RECOMMEND ───────── -->
+  <div class="screen" id="s-recommend">
+    <button class="btn-back" onclick="goScreen('s-home')">← 홈으로</button>
+    <div class="page-title">🎯 선호도 추천</div>
+    <div class="page-sub">설정한 조건 기준으로 가장 잘 맞는 우유예요</div>
+    <div id="rec-result"></div>
+    <div class="divider"></div>
+    <h3>전체 순위</h3>
+    <div class="card" style="padding:8px 18px;">
+      <div id="rec-rank"></div>
+    </div>
+    <div style="margin-top:16px;">
+      <button class="btn btn-outline" onclick="goScreen('s-home')">← 설정 변경하러 가기</button>
+    </div>
+  </div>
+
+  <!-- ───────── SCAN ───────── -->
+  <div class="screen" id="s-scan">
+    <button class="btn-back" onclick="stopScan(); goScreen('s-home')">← 홈으로</button>
+    <div class="page-title">📷 바코드 스캔</div>
+    <div class="page-sub">우유 뒷면 바코드를 카메라에 보여주세요</div>
+    <div class="info-box">목록에 없는 우유도 OK — Open Food Facts DB에서 자동으로 영양정보를 가져와요</div>
+    <div class="scan-box">
+      <div id="reader"></div>
+    </div>
+    <div style="margin-bottom:10px; text-align:center; font-size:13px; color:var(--sub);">또는 바코드 번호를 직접 입력</div>
+    <div class="scan-input-row mb12">
+      <input type="text" id="barcode-input" placeholder="예: 8801068200019" inputmode="numeric">
+      <button class="btn btn-primary btn-sm" onclick="manualLookup()">조회</button>
+    </div>
+    <div id="scan-loading" style="display:none;">
+      <div class="loading"><div class="spinner"></div>영양정보 조회 중...</div>
+    </div>
+    <div id="scan-error" style="display:none;">
+      <div class="warn-box">❌ 제품을 찾을 수 없어요. 바코드 번호를 다시 확인하거나 다른 제품을 스캔해보세요.</div>
+    </div>
+  </div>
+
+  <!-- ───────── SCAN RESULT ───────── -->
+  <div class="screen" id="s-scan-result">
+    <button class="btn-back" id="sr-back-btn" onclick="goBack()">← 뒤로</button>
+    <div class="page-title" id="sr-title">결과</div>
+    <div id="sr-source" style="margin-bottom:12px;"></div>
+    <div class="card">
+      <div class="score-hero">
+        <div>
+          <div style="font-size:13px; color:var(--sub); margin-bottom:4px;">내 기준 적합도</div>
+          <div class="score-big" id="sr-score">—</div>
+        </div>
+        <span id="sr-badge" class="score-badge">—</span>
+      </div>
+      <div id="sr-warns"></div>
+      <div class="stat-grid" id="sr-stats"></div>
+    </div>
+    <h3>다른 우유와 비교</h3>
+    <div class="card" style="padding:8px 18px;">
+      <div id="sr-rank"></div>
+    </div>
+    <div style="margin-top:16px;">
+      <button class="btn btn-outline" id="sr-bottom-btn" onclick="goBack()">← 뒤로</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── DB ──────────────────────────────────────────────
+const DB = [
+  { id:'seoulna',   name:'서울우유 나100%',         cal:70,   sugar:5,   fat:2.5, protein:3,   calcium:100, lacto:false, price:1630 },
+  { id:'namyang',   name:'남양 맛있는우유 GT',        cal:65,   sugar:4.5, fat:2.3, protein:3,   calcium:100, lacto:false, price:1620 },
+  { id:'maeil',     name:'매일우유',                 cal:65,   sugar:5,   fat:2.3, protein:3,   calcium:100, lacto:false, price:1590 },
+  { id:'lowfat',    name:'나100% 저지방',             cal:40,   sugar:5,   fat:0.6, protein:3,   calcium:100, lacto:false, price:1610 },
+  { id:'comfort',   name:'내 속이 편안한 우유',        cal:65,   sugar:3.5, fat:2.5, protein:3,   calcium:100, lacto:true,  price:1715 },
+  { id:'nonfat',    name:'서울우유 무지방',            cal:30,   sugar:5,   fat:0,   protein:3,   calcium:100, lacto:false, price:1735 },
+  { id:'hipro',     name:'고단백저지방 서울우유',      cal:50,   sugar:5,   fat:0.6, protein:5.5, calcium:180, lacto:false, price:1805 },
+  { id:'sokpyun',   name:'속편한우유 저지방',          cal:40,   sugar:5,   fat:0.6, protein:3,   calcium:100, lacto:true,  price:1655 },
+  { id:'brown',     name:'브라운 저지밀크',            cal:80,   sugar:5,   fat:3.3, protein:4,   calcium:140, lacto:false, price:2605 },
+  { id:'calcium',   name:'뼈에 쏙쏙 고칼슘우유',      cal:67.5, sugar:5,   fat:2.5, protein:3,   calcium:225, lacto:false, price:1580 },
+  { id:'digest',    name:'소화가 잘되는 우유 단백질',  cal:55,   sugar:4.5, fat:1.3, protein:4.5, calcium:135, lacto:true,  price:2085 },
+];
+
+// ── PREFS ──────────────────────────────────────────
+const PREFS = [
+  { id:'lacto',   label:'락토프리 필요',   hint:'유당 불내증이 있어요',      weight:50 },
+  { id:'protein', label:'고단백 선호',     hint:'단백질 4g 이상',            weight:20 },
+  { id:'sugar',   label:'저당 선호',       hint:'당 4g 이하',                weight:15 },
+  { id:'fat',     label:'저지방 선호',     hint:'포화지방 1g 이하',          weight:15 },
+  { id:'cal',     label:'저칼로리 선호',   hint:'칼로리 45kcal 이하',        weight:10 },
+  { id:'calcium', label:'고칼슘 선호',     hint:'칼슘 130mg 이상',           weight:15 },
+];
+
+// 토글 상태
+const state = {};
+PREFS.forEach(p => state[p.id] = false);
+
+// ── 토글 렌더 ──────────────────────────────────────
+function renderPrefs(containerId) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = PREFS.map(p => `
+    <div class="pref-row">
+      <div class="pref-info">
+        <span class="pref-label">${p.label}</span>
+        <span class="pref-hint">${p.hint}</span>
+      </div>
+      <button class="toggle ${state[p.id]?'on':''}" id="tog-${containerId}-${p.id}"
+        onclick="togglePref('${p.id}','${containerId}')"></button>
+    </div>
+  `).join('');
+}
+
+function togglePref(id, containerId) {
+  state[id] = !state[id];
+  renderPrefs(containerId);
+}
+
+// ── SCORE ──────────────────────────────────────────
+function score(m, priceW) {
+  let s = 0, max = 0;
+  if (state.lacto)   { max+=50; if (m.lacto)         s+=50; }
+  if (state.protein) { max+=20; s += m.protein>=5?20:m.protein>=4?14:m.protein>=3.5?8:3; }
+  if (state.sugar)   { max+=15; s += m.sugar<=3.5?15:m.sugar<=4?10:m.sugar<=4.5?5:0; }
+  if (state.fat)     { max+=15; s += m.fat<=0.6?15:m.fat<=1.3?9:m.fat<=2?4:0; }
+  if (state.cal)     { max+=10; s += m.cal<=35?10:m.cal<=45?7:m.cal<=55?3:0; }
+  if (state.calcium) { max+=15; s += m.calcium>=200?15:m.calcium>=130?10:m.calcium>=110?5:0; }
+  if (priceW > 0)    { const pw=priceW*4; max+=pw; s+=m.price<=1620?pw:m.price<=1720?Math.round(pw*.65):m.price<=1900?Math.round(pw*.35):0; }
+  if (max === 0) return 65;
+  return Math.round(s / max * 100);
+}
+
+// ── SCREENS ────────────────────────────────────────
+function goScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goMode(mode) {
+  if (mode === 'recommend') {
+    renderRecommend();
+    goScreen('s-recommend');
+  } else {
+    goScanScreen();
+  }
+}
+
+// ── RECOMMEND ──────────────────────────────────────
+function renderRecommend() {
+  const pw = parseInt(document.getElementById('pw').value);
+  const allScored = DB.map(m => ({ m, s: score(m, pw) })).sort((a,b) => b.s - a.s);
+
+  // Top 3
+  const medals = ['🥇','🥈','🥉'];
+  const top3Html = allScored.slice(0,3).map((item,i) => {
+    const cls = item.s>=75?'high':item.s>=45?'mid':'';
+    return `
+      <div class="top3-card ${i===0?'rank1':''}" onclick="showDetailFromDB('${item.m.id}')">
+        <div class="top3-medal">${medals[i]}</div>
+        <div class="top3-info">
+          <div class="top3-name">${item.m.name}${item.m.lacto?'<span class="tag tag-lacto">락토프리</span>':''}</div>
+          <div class="top3-meta">칼로리 ${item.m.cal}kcal · 단백질 ${item.m.protein}g · 칼슘 ${item.m.calcium}mg · ₩${item.m.price.toLocaleString()}</div>
+        </div>
+        <div class="top3-score ${cls}">${item.s}%</div>
+      </div>`;
+  }).join('');
+  document.getElementById('rec-result').innerHTML = `<div class="top3 mb20">${top3Html}</div>`;
+
+  // 전체 순위
+  const rankHtml = allScored.map((item,i) => {
+    const cls = item.s>=75?'bar-high':item.s>=45?'bar-mid':'bar-low';
+    const numCls = i===0?'gold':i===1?'silver':i===2?'bronze':'';
+    return `
+      <div class="rank-item" onclick="showDetailFromDB('${item.m.id}')" style="cursor:pointer; border-radius:8px; padding:12px 6px; margin:0 -6px; transition:background .15s;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background=''">
+        <div class="rank-num ${numCls}">${i+1}</div>
+        <div class="rank-info">
+          <div class="rank-name">${item.m.name}${item.m.lacto?'<span class="tag tag-lacto">락토프리</span>':''}</div>
+          <div class="rank-bar-wrap"><div class="rank-bar ${cls}" style="width:${item.s}%"></div></div>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <div class="rank-score" style="color:${item.s>=75?'var(--accent)':item.s>=45?'var(--yellow)':'var(--warn)'}">${item.s}%</div>
+          <span style="color:var(--sub); font-size:12px;">›</span>
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('rec-rank').innerHTML = rankHtml;
+}
+
+// ── DETAIL (DB 항목) ───────────────────────────────
+let lastScreen = 's-home';
+
+function showDetailFromDB(id) {
+  const m = DB.find(x => x.id === id);
+  const pw = parseInt(document.getElementById('pw').value);
+  lastScreen = 's-recommend';
+  showScanResult(m, false, pw);
+}
+
+function goBack() {
+  if (lastScreen === 's-recommend') {
+    goScreen('s-recommend');
+  } else {
+    goScanScreen();
+  }
+}
+
+// ── SCAN ───────────────────────────────────────────
+let scanner = null;
+let scanning = false;
+
+async function goScanScreen() {
+  await stopScan();
+  document.getElementById('scan-error').style.display = 'none';
+  document.getElementById('scan-loading').style.display = 'none';
+  document.getElementById('barcode-input').value = '';
+  goScreen('s-scan');
+  startScan();
+}
+
+async function startScan() {
+  await stopScan();
+  const readerEl = document.getElementById('reader');
+  readerEl.innerHTML = '';
+  try {
+    scanner = new Html5Qrcode('reader');
+    await scanner.start(
+      { facingMode: 'environment' },
+      { fps: 10, qrbox: { width: 250, height: 120 } },
+      (decodedText) => {
+        stopScan();
+        lookupBarcode(decodedText);
+      },
+      () => {}
+    );
+    scanning = true;
+  } catch(e) {
+    scanner = null;
+    scanning = false;
+    readerEl.innerHTML = '<div class="scan-placeholder"><div class="big">📷</div><p style="font-size:13px">카메라 접근 권한이 필요해요<br>아래에서 바코드 번호를 직접 입력해보세요</p></div>';
+  }
+}
+
+async function stopScan() {
+  if (scanner) {
+    try { if (scanning) await scanner.stop(); } catch(e) {}
+    try { scanner.clear(); } catch(e) {}
+    scanner = null;
+    scanning = false;
+  }
+}
+
+function manualLookup() {
+  const val = document.getElementById('barcode-input').value.trim();
+  if (!val) return;
+  lookupBarcode(val);
+}
+
+async function lookupBarcode(code) {
+  document.getElementById('scan-error').style.display = 'none';
+  document.getElementById('scan-loading').style.display = 'block';
+
+  // 1) 로컬 DB에서 먼저 확인 (향후 바코드 필드 추가 가능)
+  // 2) Open Food Facts API 조회
+  try {
+    const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
+    const data = await res.json();
+    document.getElementById('scan-loading').style.display = 'none';
+
+    if (data.status !== 1 || !data.product) {
+      document.getElementById('scan-error').style.display = 'block';
+      return;
+    }
+
+    const p = data.product;
+    const n = p.nutriments || {};
+    const milk = {
+      id: 'api_' + code,
+      name: p.product_name_ko || p.product_name || '알 수 없는 제품',
+      cal:     Math.round(n['energy-kcal_100g'] || n['energy-kcal_serving'] || 0),
+      sugar:   parseFloat((n['sugars_100g'] || 0).toFixed(1)),
+      fat:     parseFloat((n['saturated-fat_100g'] || 0).toFixed(1)),
+      protein: parseFloat((n['proteins_100g'] || 0).toFixed(1)),
+      calcium: Math.round((n['calcium_100g'] || 0) * 1000),
+      lacto:   false,
+      price:   0,
+    };
+
+    lastScreen = 's-scan';
+    showScanResult(milk, true, parseInt(document.getElementById('pw').value));
+  } catch(e) {
+    document.getElementById('scan-loading').style.display = 'none';
+    document.getElementById('scan-error').style.display = 'block';
+  }
+}
+
+// ── SCAN RESULT ────────────────────────────────────
+function showScanResult(milk, fromApi, pw) {
+  const allScored = DB.map(m => ({ m, s: score(m, pw) })).sort((a,b) => b.s - a.s);
+  const myScore = score(milk, pw);
+
+  document.getElementById('sr-title').textContent = milk.name;
+  document.getElementById('sr-source').innerHTML = fromApi
+    ? '<div class="info-box">☁️ Open Food Facts DB에서 실시간으로 가져온 영양 정보예요</div>'
+    : '';
+
+  // 점수
+  const scoreEl = document.getElementById('sr-score');
+  scoreEl.textContent = myScore + '%';
+  scoreEl.className = 'score-big ' + (myScore>=75?'high':myScore>=45?'mid':'low');
+
+  const badge = document.getElementById('sr-badge');
+  if (myScore>=75){ badge.textContent='잘 맞아요 ✓'; badge.className='score-badge badge-ok'; }
+  else if (myScore>=45){ badge.textContent='보통이에요'; badge.className='score-badge badge-mid'; }
+  else { badge.textContent='맞지 않아요'; badge.className='score-badge badge-bad'; }
+
+  // 경고
+  let warns = '';
+  if (state.lacto && !milk.lacto) warns += '<div class="warn-box">⚠️ 락토프리 제품이 아니에요 — 점수에 크게 반영됩니다</div>';
+  if (state.sugar && milk.sugar > 4)  warns += `<div class="warn-box">⚠️ 당 함량이 높아요 (${milk.sugar}g)</div>`;
+  if (state.fat   && milk.fat > 1.5)  warns += `<div class="warn-box">⚠️ 포화지방이 높아요 (${milk.fat}g)</div>`;
+  if (state.cal   && milk.cal > 55)   warns += `<div class="warn-box">⚠️ 칼로리가 높아요 (${milk.cal}kcal)</div>`;
+  document.getElementById('sr-warns').innerHTML = warns;
+
+  // 영양 스탯
+  document.getElementById('sr-stats').innerHTML = [
+    [milk.cal + ' kcal', '칼로리'],
+    [milk.sugar + 'g',   '당'],
+    [milk.fat + 'g',     '포화지방'],
+    [milk.protein + 'g', '단백질'],
+    [milk.calcium + 'mg','칼슘'],
+    [milk.price > 0 ? '₩' + milk.price.toLocaleString() : '—', '가격(500ml)'],
+  ].map(([v,l]) => `<div class="stat-cell"><div class="stat-val">${v}</div><div class="stat-lbl">${l}</div></div>`).join('');
+
+  // 비교 순위 (로컬 DB + 현재 제품)
+  const withCurrent = fromApi
+    ? [...allScored, { m: milk, s: myScore }].sort((a,b) => b.s - a.s)
+    : allScored;
+
+  const rankHtml = withCurrent.map((item, i) => {
+    const isCur = item.m.id === milk.id;
+    const cls = item.s>=75?'bar-high':item.s>=45?'bar-mid':'bar-low';
+    const numCls = i===0?'gold':i===1?'silver':i===2?'bronze':'';
+    const clickable = !isCur && !fromApi;
+    return `
+      <div class="rank-item"
+        style="${isCur?'background:#f0f9f5;border-radius:8px;padding:12px 8px;margin:0 -8px;':'border-radius:8px;padding:12px 6px;margin:0 -6px;'} ${clickable?'cursor:pointer;':''} transition:background .15s;"
+        ${clickable ? `onclick="showDetailFromDB('${item.m.id}')" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='${isCur?'#f0f9f5':''}'"` : ''}>
+        <div class="rank-num ${numCls}">${i+1}</div>
+        <div class="rank-info">
+          <div class="rank-name">
+            ${item.m.name}
+            ${item.m.lacto?'<span class="tag tag-lacto">락토프리</span>':''}
+            ${isCur?'<span class="tag tag-cur">현재</span>':''}
+          </div>
+          <div class="rank-bar-wrap"><div class="rank-bar ${cls}" style="width:${item.s}%"></div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="rank-score" style="color:${item.s>=75?'var(--accent)':item.s>=45?'var(--yellow)':'var(--warn)'}">${item.s}%</div>
+          ${clickable ? '<span style="color:var(--sub);font-size:12px;">›</span>' : ''}
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('sr-rank').innerHTML = rankHtml;
+
+  stopScan();
+  goScreen('s-scan-result');
+}
+
+// ── INIT ───────────────────────────────────────────
+renderPrefs('pref-home');
+</script>
+</body>
+</html>
