@@ -1,7 +1,7 @@
 # Capstone Project 2.5 — Making It Valuable
 ## Improving a milk-comparison prototype through trustworthy data and user evidence
 
-**Status: baseline imported; improvement and evaluation not yet completed.**
+**Status: first manufacturer-source catalog audit completed; app repairs and user evaluation remain pending.**
 
 This repository continues [Capstone Project 2](https://github.com/chunspringbom-dot/capstone-project-2). The original project moved from displaying milk information to preference-based ranking after team discussion and teacher feedback. Project 2.5 focuses on making that prototype accurate, understandable, and useful in a school setting.
 
@@ -36,6 +36,14 @@ A useful nutrition tool needs more than a ranking. It needs reliable input data,
 
 The baseline audit found mixed measurement bases, missing values treated as zero, incomplete lactose-free handling, and unverified nutrient/price sources. These are the first priorities.
 
+### Standard nutrition units
+
+The [nutrient comparison table](data/NUTRIENTS_PER_100ML.md) and canonical JSON nutrient profiles use **per 100 mL (100mL 기준)**. Total fat, saturated fat and trans fat are recorded separately in grams. Missing evidence remains unknown; original label bases are retained separately. This dataset is not yet connected to the baseline app.
+
+### First data-audit result
+
+The [October 15 audit](results/2026-10-15-product-data-audit.md) reviews all 11 baseline products. It preserves accepted manufacturer tables, sources, dates and unknowns in a [structured record](data/product-verification-2026-10-15.json). Six products match the five stored nutrient values; high-calcium milk requires package/basis clarification; four products need further exact-variant evidence. No complete catalog, current baseline prices, app repair or educational benefit is claimed. The audit dataset is not yet connected to the app.
+
 ### Planned improvements
 
 1. Verify the existing product catalog and preserve unknown values.
@@ -62,7 +70,7 @@ Background sources:
 | A prototype exists | Imported source code |
 | Known implementation problems identified | Static code audit |
 | Problems fixed | Not yet demonstrated |
-| Product data verified | Not yet completed |
+| Product data checked | [First audit](results/2026-10-15-product-data-audit.md): six five-field matches, one basis clarification, four unresolved nutrient records; baseline prices unverified |
 | Students understand labels better | Not measured |
 | Students reuse the tool | Not measured |
 | Health outcomes improve | Not studied; outside the initial pilot |

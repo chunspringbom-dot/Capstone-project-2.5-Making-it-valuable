@@ -1,0 +1,758 @@
+{
+  "audit_date": "2026-10-15",
+  "baseline_commit": "3d1fcafd4eb3de17a0bbc839c92907bfaf912f70",
+  "scope": "All 11 baseline products reviewed; six match five baseline nutrient fields and have separate official total/saturated/trans-fat values. One requires basis clarification; four have unresolved nutrient evidence. Canonical nutrient objects uniformly use 100 mL; null is unknown. Original source tables retain their original bases. App unchanged.",
+  "field_mapping": {
+    "cal": "energy_kcal",
+    "sugar": "total_sugars_g",
+    "fat": "saturated_fat_g",
+    "protein": "protein_g",
+    "calcium": "calcium_mg"
+  },
+  "unknown_value": null,
+  "sources": {
+    "S01": {
+      "publisher": "Seoul Milk",
+      "url": "https://www.seoulmilk.co.kr/enterprise/product/product_view.sm?nmNo=10000000000587",
+      "product_name": "서울우유 나100%",
+      "evidence": "Manufacturer nutrition table, per 100 mL. Sizes include 200, 300, 500, 1000, 1800, 2300 and 3000 mL.",
+      "retrieval": "Search service returned the full nutrition table; an initial page-open attempt timed out.",
+      "access_date": "2026-10-15",
+      "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
+    },
+    "S02": {
+      "publisher": "Seoul Milk",
+      "url": "https://www.seoulmilk.co.kr/enterprise/product/product_view.sm?nmNo=10000000000586",
+      "product_name": "서울우유 나100% 저지방우유",
+      "evidence": "Manufacturer nutrition table, per 100 mL. Sizes: 200, 500, 1000, 1800 and 2300 mL.",
+      "access_date": "2026-10-15",
+      "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
+    },
+    "S03": {
+      "publisher": "Seoul Milk",
+      "url": "https://www.seoulmilk.co.kr/enterprise/product/product_view.sm?nmNo=10000000000471",
+      "product_name": "내 속이 편안한 우유",
+      "evidence": "Manufacturer tables for 900 mL and 2.3 L packages, both per 100 mL; product category is lactose-decomposed milk.",
+      "access_date": "2026-10-15",
+      "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
+    },
+    "S04": {
+      "publisher": "Seoul Milk",
+      "url": "https://m.seoulmilk.co.kr/mobile/product/product_view.sm?gubun=&nmNo=10000000000640&page=2&subname=P0",
+      "product_name": "무지방 우유",
+      "evidence": "900 mL plain nonfat milk; per-100-mL table. Do not confuse with nonfat-and-calcium milk.",
+      "access_date": "2026-10-15",
+      "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
+    },
+    "S05": {
+      "publisher": "Seoul Milk",
+      "url": "https://www.seoulmilk.co.kr/enterprise/product/product_view.sm?nmNo=10000000000585",
+      "product_name": "고단백저지방",
+      "evidence": "900 mL processed milk; per-100-mL nutrition table.",
+      "access_date": "2026-10-15",
+      "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
+    },
+    "S06": {
+      "publisher": "Seoul Milk",
+      "url": "https://www.seoulmilk.co.kr/enterprise/product/product_view.sm?nmNo=10000000000584",
+      "product_name": "속편한우유 저지방",
+      "evidence": "900 mL lactose-decomposed milk; per-100-mL table. Manufacturer describes enzymatic lactose breakdown, not removal.",
+      "access_date": "2026-10-15",
+      "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
+    },
+    "S07": {
+      "publisher": "Seoul Milk",
+      "url": "https://www.seoulmilk.co.kr/enterprise/product/product_view.sm?nmNo=10000000000579",
+      "product_name": "뼈에 쏙쏙 고칼슘우유",
+      "evidence": "Sizes 200 and 930 mL. Page gives 135 kcal per 200 mL and a separate 70 kcal per 100 mL table. Other five relevant nutrient amounts normalize consistently; energy differs by 2.5 kcal per 100 mL. Cause not established.",
+      "access_date": "2026-10-15",
+      "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
+    },
+    "S08": {
+      "publisher": "Maeil Direct (manufacturer official shop)",
+      "url": "https://direct.maeil.com/m/product/productView.do?productCode=P07415",
+      "product_name": "소화가 잘되는 우유 단백질 930ml",
+      "evidence": "Listed price KRW 4500 for 930 mL, home-delivery context. Linked detail image resolved to a generic/low-fat milk graphic, not a usable exact-product nutrition panel. Nutrition values not accepted from that image.",
+      "access_date": "2026-10-15",
+      "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
+    },
+    "S09": {
+      "publisher": "Maeil Dairies",
+      "url": "https://www.maeil.com/brand/view_brand1.jsp?dpid=A0000600",
+      "product_name": "매일우유",
+      "evidence": "Manufacturer identifies refrigerated 1.5 L / 2.3 L milk. Retrieved text does not provide the five required nutrient values; baseline has no package identifier.",
+      "access_date": "2026-10-15",
+      "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
+    },
+    "S10": {
+      "publisher": "Maeil Dairies",
+      "url": "https://www.maeil.com/brand/view_brand1.jsp?dpid=A0000289",
+      "product_name": "매일우유 오리지널",
+      "evidence": "Related original variant in 200, 500 and 1000 mL sizes. Does not establish which variant the baseline intended.",
+      "access_date": "2026-10-15",
+      "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
+    },
+    "S11": {
+      "publisher": "Seoul Milk",
+      "url": "https://m.seoulmilk.co.kr/mobile/product/product_view.sm?gubun=&nmNo=10000000000458&page=1&subname=P0",
+      "product_name": "로얄 저지밀크",
+      "evidence": "Search located a related Jersey milk product with a different name. Page retrieval failed; no nutrition accepted and no equivalence to Brown Jersey established.",
+      "access_date": "2026-10-15",
+      "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
+    },
+    "S12": {
+      "publisher": "Namyang",
+      "url": "https://mcompany.namyangi.com/mobile/product/prod_view.asp?brand_seq=504",
+      "product_name": null,
+      "evidence": "Official-domain search hit mentioning GT; page retrieval failed. This is a search lead, not nutrient evidence.",
+      "access_date": "2026-10-15",
+      "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
+    },
+    "S13": {
+      "publisher": "Seoul Milk",
+      "url": "https://www.seoulmilk.co.kr/enterprise/product/product_view.sm?nmNo=10000000000581",
+      "product_name": "무지방&칼슘 우유",
+      "evidence": "Different nonfat-and-calcium product, 900 mL. Calcium is 120 mg per 100 mL, rather than plain nonfat milk 100 mg; excluded as a replacement for baseline nonfat.",
+      "access_date": "2026-10-15",
+      "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
+    }
+  },
+  "products": [
+    {
+      "id": "seoulna",
+      "baseline": {
+        "id": "seoulna",
+        "name": "서울우유 나100%",
+        "cal": 70.0,
+        "sugar": 5.0,
+        "fat": 2.5,
+        "protein": 3.0,
+        "calcium": 100.0,
+        "lacto": false,
+        "price": 1630.0
+      },
+      "barcode": null,
+      "added_sugars_g": null,
+      "price_verification": "baseline price unverified: no source, date or purchased volume",
+      "nutrition_per_100ml": {
+        "energy_kcal": 70,
+        "total_sugars_g": 5,
+        "total_fat_g": 4,
+        "saturated_fat_g": 2.5,
+        "trans_fat_g": 0,
+        "protein_g": 3,
+        "calcium_mg": 100
+      },
+      "source_ids": [
+        "S01"
+      ],
+      "lactose_free_claim": null,
+      "lactose_processing_evidence": null,
+      "status": "five_nutrient_fields_match",
+      "nutrition_basis": {
+        "amount": 100,
+        "unit": "mL"
+      },
+      "comparisons": {
+        "cal": {
+          "baseline": 70.0,
+          "reference": 70,
+          "match": true
+        },
+        "sugar": {
+          "baseline": 5.0,
+          "reference": 5,
+          "match": true
+        },
+        "fat": {
+          "baseline": 2.5,
+          "reference": 2.5,
+          "match": true
+        },
+        "protein": {
+          "baseline": 3.0,
+          "reference": 3,
+          "match": true
+        },
+        "calcium": {
+          "baseline": 100.0,
+          "reference": 100,
+          "match": true
+        }
+      }
+    },
+    {
+      "id": "namyang",
+      "baseline": {
+        "id": "namyang",
+        "name": "남양 맛있는우유 GT",
+        "cal": 65.0,
+        "sugar": 4.5,
+        "fat": 2.3,
+        "protein": 3.0,
+        "calcium": 100.0,
+        "lacto": false,
+        "price": 1620.0
+      },
+      "barcode": null,
+      "added_sugars_g": null,
+      "price_verification": "baseline price unverified: no source, date or purchased volume",
+      "nutrition_per_100ml": {
+        "energy_kcal": null,
+        "total_sugars_g": null,
+        "total_fat_g": null,
+        "saturated_fat_g": null,
+        "trans_fat_g": null,
+        "protein_g": null,
+        "calcium_mg": null
+      },
+      "source_ids": [
+        "S12"
+      ],
+      "lactose_free_claim": null,
+      "lactose_processing_evidence": null,
+      "status": "nutrition_unverified",
+      "note": "GT is a product family; no exact manufacturer panel retrieved. Third-party search results were not promoted to verified data.",
+      "nutrition_basis": {
+        "amount": 100,
+        "unit": "mL"
+      }
+    },
+    {
+      "id": "maeil",
+      "baseline": {
+        "id": "maeil",
+        "name": "매일우유",
+        "cal": 65.0,
+        "sugar": 5.0,
+        "fat": 2.3,
+        "protein": 3.0,
+        "calcium": 100.0,
+        "lacto": false,
+        "price": 1590.0
+      },
+      "barcode": null,
+      "added_sugars_g": null,
+      "price_verification": "baseline price unverified: no source, date or purchased volume",
+      "nutrition_per_100ml": {
+        "energy_kcal": null,
+        "total_sugars_g": null,
+        "total_fat_g": null,
+        "saturated_fat_g": null,
+        "trans_fat_g": null,
+        "protein_g": null,
+        "calcium_mg": null
+      },
+      "source_ids": [
+        "S09",
+        "S10"
+      ],
+      "lactose_free_claim": null,
+      "lactose_processing_evidence": null,
+      "status": "exact_variant_and_nutrition_unresolved",
+      "note": "Refrigerated large-format milk and Original variants found; do not substitute a 200-mL UHT product for an unspecified baseline variant.",
+      "nutrition_basis": {
+        "amount": 100,
+        "unit": "mL"
+      }
+    },
+    {
+      "id": "lowfat",
+      "baseline": {
+        "id": "lowfat",
+        "name": "나100% 저지방",
+        "cal": 40.0,
+        "sugar": 5.0,
+        "fat": 0.6,
+        "protein": 3.0,
+        "calcium": 100.0,
+        "lacto": false,
+        "price": 1610.0
+      },
+      "barcode": null,
+      "added_sugars_g": null,
+      "price_verification": "baseline price unverified: no source, date or purchased volume",
+      "nutrition_per_100ml": {
+        "energy_kcal": 40,
+        "total_sugars_g": 5,
+        "total_fat_g": 1,
+        "saturated_fat_g": 0.6,
+        "trans_fat_g": 0,
+        "protein_g": 3,
+        "calcium_mg": 100
+      },
+      "source_ids": [
+        "S02"
+      ],
+      "lactose_free_claim": null,
+      "lactose_processing_evidence": null,
+      "status": "five_nutrient_fields_match",
+      "nutrition_basis": {
+        "amount": 100,
+        "unit": "mL"
+      },
+      "comparisons": {
+        "cal": {
+          "baseline": 40.0,
+          "reference": 40,
+          "match": true
+        },
+        "sugar": {
+          "baseline": 5.0,
+          "reference": 5,
+          "match": true
+        },
+        "fat": {
+          "baseline": 0.6,
+          "reference": 0.6,
+          "match": true
+        },
+        "protein": {
+          "baseline": 3.0,
+          "reference": 3,
+          "match": true
+        },
+        "calcium": {
+          "baseline": 100.0,
+          "reference": 100,
+          "match": true
+        }
+      }
+    },
+    {
+      "id": "comfort",
+      "baseline": {
+        "id": "comfort",
+        "name": "내 속이 편안한 우유",
+        "cal": 65.0,
+        "sugar": 3.5,
+        "fat": 2.5,
+        "protein": 3.0,
+        "calcium": 100.0,
+        "lacto": true,
+        "price": 1715.0
+      },
+      "barcode": null,
+      "added_sugars_g": null,
+      "price_verification": "baseline price unverified: no source, date or purchased volume",
+      "nutrition_per_100ml": {
+        "energy_kcal": 65,
+        "total_sugars_g": 3.5,
+        "total_fat_g": 4,
+        "saturated_fat_g": 2.5,
+        "trans_fat_g": 0,
+        "protein_g": 3,
+        "calcium_mg": 100
+      },
+      "source_ids": [
+        "S03"
+      ],
+      "lactose_free_claim": null,
+      "lactose_processing_evidence": "Manufacturer explicitly identifies lactose-decomposed milk; residual lactose amount/threshold not verified.",
+      "status": "five_nutrient_fields_match",
+      "nutrition_basis": {
+        "amount": 100,
+        "unit": "mL"
+      },
+      "comparisons": {
+        "cal": {
+          "baseline": 65.0,
+          "reference": 65,
+          "match": true
+        },
+        "sugar": {
+          "baseline": 3.5,
+          "reference": 3.5,
+          "match": true
+        },
+        "fat": {
+          "baseline": 2.5,
+          "reference": 2.5,
+          "match": true
+        },
+        "protein": {
+          "baseline": 3.0,
+          "reference": 3,
+          "match": true
+        },
+        "calcium": {
+          "baseline": 100.0,
+          "reference": 100,
+          "match": true
+        }
+      }
+    },
+    {
+      "id": "nonfat",
+      "baseline": {
+        "id": "nonfat",
+        "name": "서울우유 무지방",
+        "cal": 30.0,
+        "sugar": 5.0,
+        "fat": 0.0,
+        "protein": 3.0,
+        "calcium": 100.0,
+        "lacto": false,
+        "price": 1735.0
+      },
+      "barcode": null,
+      "added_sugars_g": null,
+      "price_verification": "baseline price unverified: no source, date or purchased volume",
+      "nutrition_per_100ml": {
+        "energy_kcal": 30,
+        "total_sugars_g": 5,
+        "total_fat_g": 0,
+        "saturated_fat_g": 0,
+        "trans_fat_g": 0,
+        "protein_g": 3,
+        "calcium_mg": 100
+      },
+      "source_ids": [
+        "S04"
+      ],
+      "lactose_free_claim": null,
+      "lactose_processing_evidence": null,
+      "status": "five_nutrient_fields_match",
+      "nutrition_basis": {
+        "amount": 100,
+        "unit": "mL"
+      },
+      "comparisons": {
+        "cal": {
+          "baseline": 30.0,
+          "reference": 30,
+          "match": true
+        },
+        "sugar": {
+          "baseline": 5.0,
+          "reference": 5,
+          "match": true
+        },
+        "fat": {
+          "baseline": 0.0,
+          "reference": 0,
+          "match": true
+        },
+        "protein": {
+          "baseline": 3.0,
+          "reference": 3,
+          "match": true
+        },
+        "calcium": {
+          "baseline": 100.0,
+          "reference": 100,
+          "match": true
+        }
+      }
+    },
+    {
+      "id": "hipro",
+      "baseline": {
+        "id": "hipro",
+        "name": "고단백저지방 서울우유",
+        "cal": 50.0,
+        "sugar": 5.0,
+        "fat": 0.6,
+        "protein": 5.5,
+        "calcium": 180.0,
+        "lacto": false,
+        "price": 1805.0
+      },
+      "barcode": null,
+      "added_sugars_g": null,
+      "price_verification": "baseline price unverified: no source, date or purchased volume",
+      "nutrition_per_100ml": {
+        "energy_kcal": 50,
+        "total_sugars_g": 5,
+        "total_fat_g": 1,
+        "saturated_fat_g": 0.6,
+        "trans_fat_g": 0,
+        "protein_g": 5.5,
+        "calcium_mg": 180
+      },
+      "source_ids": [
+        "S05"
+      ],
+      "lactose_free_claim": null,
+      "lactose_processing_evidence": null,
+      "status": "five_nutrient_fields_match",
+      "nutrition_basis": {
+        "amount": 100,
+        "unit": "mL"
+      },
+      "comparisons": {
+        "cal": {
+          "baseline": 50.0,
+          "reference": 50,
+          "match": true
+        },
+        "sugar": {
+          "baseline": 5.0,
+          "reference": 5,
+          "match": true
+        },
+        "fat": {
+          "baseline": 0.6,
+          "reference": 0.6,
+          "match": true
+        },
+        "protein": {
+          "baseline": 5.5,
+          "reference": 5.5,
+          "match": true
+        },
+        "calcium": {
+          "baseline": 180.0,
+          "reference": 180,
+          "match": true
+        }
+      }
+    },
+    {
+      "id": "sokpyun",
+      "baseline": {
+        "id": "sokpyun",
+        "name": "속편한우유 저지방",
+        "cal": 40.0,
+        "sugar": 5.0,
+        "fat": 0.6,
+        "protein": 3.0,
+        "calcium": 100.0,
+        "lacto": true,
+        "price": 1655.0
+      },
+      "barcode": null,
+      "added_sugars_g": null,
+      "price_verification": "baseline price unverified: no source, date or purchased volume",
+      "nutrition_per_100ml": {
+        "energy_kcal": 40,
+        "total_sugars_g": 5,
+        "total_fat_g": 1,
+        "saturated_fat_g": 0.6,
+        "trans_fat_g": 0,
+        "protein_g": 3,
+        "calcium_mg": 100
+      },
+      "source_ids": [
+        "S06"
+      ],
+      "lactose_free_claim": null,
+      "lactose_processing_evidence": "Manufacturer explicitly identifies lactose-decomposed milk; residual lactose amount/threshold not verified.",
+      "status": "five_nutrient_fields_match",
+      "nutrition_basis": {
+        "amount": 100,
+        "unit": "mL"
+      },
+      "comparisons": {
+        "cal": {
+          "baseline": 40.0,
+          "reference": 40,
+          "match": true
+        },
+        "sugar": {
+          "baseline": 5.0,
+          "reference": 5,
+          "match": true
+        },
+        "fat": {
+          "baseline": 0.6,
+          "reference": 0.6,
+          "match": true
+        },
+        "protein": {
+          "baseline": 3.0,
+          "reference": 3,
+          "match": true
+        },
+        "calcium": {
+          "baseline": 100.0,
+          "reference": 100,
+          "match": true
+        }
+      }
+    },
+    {
+      "id": "brown",
+      "baseline": {
+        "id": "brown",
+        "name": "브라운 저지밀크",
+        "cal": 80.0,
+        "sugar": 5.0,
+        "fat": 3.3,
+        "protein": 4.0,
+        "calcium": 140.0,
+        "lacto": false,
+        "price": 2605.0
+      },
+      "barcode": null,
+      "added_sugars_g": null,
+      "price_verification": "baseline price unverified: no source, date or purchased volume",
+      "nutrition_per_100ml": {
+        "energy_kcal": null,
+        "total_sugars_g": null,
+        "total_fat_g": null,
+        "saturated_fat_g": null,
+        "trans_fat_g": null,
+        "protein_g": null,
+        "calcium_mg": null
+      },
+      "source_ids": [
+        "S11"
+      ],
+      "lactose_free_claim": null,
+      "lactose_processing_evidence": null,
+      "status": "exact_variant_and_nutrition_unresolved",
+      "note": "Brown Jersey baseline name was not matched to an exact manufacturer nutrition table; related Royal Jersey is not a verified substitute.",
+      "nutrition_basis": {
+        "amount": 100,
+        "unit": "mL"
+      }
+    },
+    {
+      "id": "calcium",
+      "baseline": {
+        "id": "calcium",
+        "name": "뼈에 쏙쏙 고칼슘우유",
+        "cal": 67.5,
+        "sugar": 5.0,
+        "fat": 2.5,
+        "protein": 3.0,
+        "calcium": 225.0,
+        "lacto": false,
+        "price": 1580.0
+      },
+      "barcode": null,
+      "added_sugars_g": null,
+      "price_verification": "baseline price unverified: no source, date or purchased volume",
+      "nutrition_per_100ml": {
+        "energy_kcal": null,
+        "total_sugars_g": 5,
+        "total_fat_g": 4,
+        "saturated_fat_g": 2.5,
+        "trans_fat_g": null,
+        "protein_g": 3,
+        "calcium_mg": 225
+      },
+      "source_ids": [
+        "S07"
+      ],
+      "lactose_free_claim": null,
+      "lactose_processing_evidence": null,
+      "status": "basis_clarification_required",
+      "source_nutrition_tables": [
+        {
+          "basis_ml": 200,
+          "values": {
+            "energy_kcal": 135,
+            "total_sugars_g": 10,
+            "saturated_fat_g": 5,
+            "protein_g": 6,
+            "calcium_mg": 450,
+            "total_fat_g": 8,
+            "trans_fat_g": null
+          },
+          "trans_fat_label": {
+            "operator": "<",
+            "amount_g": 0.5,
+            "basis_ml": 200
+          }
+        },
+        {
+          "basis_ml": 100,
+          "values": {
+            "energy_kcal": 70,
+            "total_sugars_g": 5,
+            "saturated_fat_g": 2.5,
+            "protein_g": 3,
+            "calcium_mg": 225,
+            "total_fat_g": 4,
+            "trans_fat_g": 0
+          }
+        }
+      ],
+      "derived_from_200ml": {
+        "energy_kcal": 67.5,
+        "total_sugars_g": 5,
+        "saturated_fat_g": 2.5,
+        "protein_g": 3,
+        "calcium_mg": 225,
+        "total_fat_g": 4,
+        "trans_fat_g": null
+      },
+      "note": "Baseline matches the 200-mL table divided by two. The separate 100-mL table lists 70 kcal. Do not call 67.5 wrong or silently select a package variant; retain both tables until SKU/package resolution.",
+      "nutrition_basis": {
+        "amount": 100,
+        "unit": "mL"
+      },
+      "derived_from_200ml_trans_fat_label": {
+        "operator": "<",
+        "amount_g": 0.25,
+        "basis_ml": 100
+      },
+      "normalization_note": "Common, unambiguous fields retained per 100 mL. Energy and trans fat left null in the canonical profile because the source tables differ. The 200-mL label states trans fat <0.5 g, equivalent to <0.25 g per 100 mL; this is not zero or exactly 0.25 g. The separate 100-mL table states 0 g. Both original tables are retained."
+    },
+    {
+      "id": "digest",
+      "baseline": {
+        "id": "digest",
+        "name": "소화가 잘되는 우유 단백질",
+        "cal": 55.0,
+        "sugar": 4.5,
+        "fat": 1.3,
+        "protein": 4.5,
+        "calcium": 135.0,
+        "lacto": true,
+        "price": 2085.0
+      },
+      "barcode": null,
+      "added_sugars_g": null,
+      "price_verification": "baseline price unverified: no source, date or purchased volume",
+      "nutrition_per_100ml": {
+        "energy_kcal": null,
+        "total_sugars_g": null,
+        "total_fat_g": null,
+        "saturated_fat_g": null,
+        "trans_fat_g": null,
+        "protein_g": null,
+        "calcium_mg": null
+      },
+      "source_ids": [
+        "S08"
+      ],
+      "lactose_free_claim": null,
+      "lactose_processing_evidence": null,
+      "status": "price_observed_nutrition_unverified",
+      "price_observation": {
+        "currency": "KRW",
+        "package_price": 4500,
+        "package_volume_ml": 930,
+        "channel": "Maeil Direct home delivery",
+        "access_date": "2026-10-15",
+        "shipping_cost": null,
+        "availability_confirmed": false,
+        "price_per_100ml": 483.870968,
+        "equivalent_price_per_500ml": 2419.354839,
+        "note": "Unit-price arithmetic only; not a purchasable 500-mL package or proof baseline 2085 is wrong."
+      },
+      "nutrition_basis": {
+        "amount": 100,
+        "unit": "mL"
+      }
+    }
+  ],
+  "standard_nutrition_basis": {
+    "amount": 100,
+    "unit": "mL",
+    "display_label": "Per 100 mL / 100mL 기준",
+    "rule": "All nutrition_per_100ml fields use this volume basis. Unknown values remain null. Original source tables and baseline are retained for traceability, not treated as standardized verified data."
+  },
+  "nutrient_units": {
+    "energy_kcal": "kcal",
+    "total_sugars_g": "g",
+    "total_fat_g": "g",
+    "saturated_fat_g": "g",
+    "trans_fat_g": "g",
+    "protein_g": "g",
+    "calcium_mg": "mg"
+  }
+}

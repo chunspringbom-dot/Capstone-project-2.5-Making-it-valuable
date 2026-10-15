@@ -9,6 +9,8 @@ The original project began with the project initiator's milk-comparison idea and
 | 2026-10-14 | Project initiator | Chose the improvement phase and requested development/results/use documentation | Project direction and kickoff log | Future logs should capture personal reasoning |
 | 2026-10-14 | ChatGPT | Inspected source, imported baseline, drafted documentation and templates | Repository setup commits | User review and independent verification remain to be recorded |
 
+| 2026-10-15 | ChatGPT, at user request | Manufacturer-source searches, eleven-record data audit and English documentation | [Audit result](../results/2026-10-15-product-data-audit.md) | AI-assisted desk review; human second review and personal learning not yet recorded |
+
 Add specific tasks rather than broad unsupported titles. Link code, data records, analyses, explanations, or feedback summaries.
 
 ## AI assistance

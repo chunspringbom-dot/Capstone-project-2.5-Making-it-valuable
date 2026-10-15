@@ -1,12 +1,12 @@
 # Results and Validation
 
-**No technical repair results or participant-study results have been recorded yet.** The baseline source audit is available separately in [docs/BASELINE_AUDIT.md](../docs/BASELINE_AUDIT.md).
+**The first manufacturer-source data audit is recorded below. No app-repair or participant-study results have been recorded.** The baseline source audit is available separately in [docs/BASELINE_AUDIT.md](../docs/BASELINE_AUDIT.md).
 
 Copy [TEMPLATE.md](TEMPLATE.md) for each completed check or evaluation and link it here.
 
 | Date | Result record | App version | Type |
 | --- | --- | --- | --- |
-| — | No results recorded yet | — | — |
+| 2026-10-15 | [Manufacturer-source catalog audit](2026-10-15-product-data-audit.md) | Baseline 3d1fcaf; app unchanged | Data-source comparison |
 
 ## What belongs here
 

@@ -4,6 +4,7 @@ Use one entry per meaningful working session. Copy [TEMPLATE.md](TEMPLATE.md) to
 
 | Date | Entry | Status |
 | --- | --- | --- |
+| 2026-10-15 | [Manufacturer data audit](2026-10-15-manufacturer-data-audit.md) | First desk audit recorded; remaining gaps explicit |
 | 2026-10-14 | [Improvement-phase kickoff](2026-10-14-kickoff.md) | Documentation and baseline setup complete |
 
 ## Recording rules

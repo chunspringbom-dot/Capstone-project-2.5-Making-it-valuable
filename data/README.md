@@ -1,8 +1,12 @@
 # Product Data and Verification
 
-The current app still uses its original hard-coded catalog in index.html. No verified replacement dataset is included yet.
+The current app still uses its original hard-coded catalog in index.html. The first [structured audit](product-verification-2026-10-15.json) is now available, with its [findings and limits](../results/2026-10-15-product-data-audit.md). It is not connected to the app and is not a fully verified replacement catalog. Six records match five nutrient fields; one requires basis clarification; four lack sufficient nutrient evidence. All baseline prices remain unverified. Null means unknown; source IDs and original values are retained.
 
 For each product, create a record using the fields below. Use manufacturer information or a current package label where available. Do not invent values to fill gaps.
+
+## Standardized comparison
+
+See [Product nutrients — per 100 mL](NUTRIENTS_PER_100ML.md). Every canonical nutrition record uses **100 mL (100mL 기준)** with explicit kcal, g and mg units. Total fat, saturated fat and trans fat have separate fields. Unknown values remain null, including unresolved product profiles. Original label tables retain their original bases as evidence.
 
 ## Product record fields
 
@@ -13,7 +17,7 @@ For each product, create a record using the fields below. Use manufacturer infor
 - Package volume and serving volume, in mL where available
 - Original nutrition basis: per serving / per 100 mL / per 100 g / other
 - Energy and unit; protein; total sugars; added sugars if explicitly available
-- Total fat and saturated fat as separate fields
+- Total fat, saturated fat and trans fat as separate gram fields per 100 mL
 - Calcium and its unit
 - Lactose-free status: verified true / verified false / unknown
 - Price, currency, package size, store/source, and observation date
