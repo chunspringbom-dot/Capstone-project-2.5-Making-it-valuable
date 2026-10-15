@@ -1,4 +1,7 @@
 # Capstone Project 2.5 — Making It Valuable
+
+> Latest data update (2026-10-15): all 11 selected products have source-supported nutrition profiles per 100 mL, including the Maeil Original trans-fat bound. User label images resolved GT, Maeil Protein and the selected 930-mL high-calcium product. Prices remain unverified; app integration is pending. See the [current nutrient table](data/NUTRIENTS_PER_100ML.md). Earlier audit counts below describe the initial review.
+
 ## Improving a milk-comparison prototype through trustworthy data and user evidence
 
 **Status: first manufacturer-source catalog audit completed; app repairs and user evaluation remain pending.**

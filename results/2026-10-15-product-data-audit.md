@@ -1,5 +1,16 @@
 # Manufacturer-source product data audit — October 15, 2026
 
+## Latest follow-up: remaining label gaps resolved
+
+The user supplied three additional label images and identified image(1) as Maeil Digestible Milk Protein. This supersedes the unresolved nutrition status in earlier sections below.
+
+- S16: Maeil Protein 930 mL, per 100 mL: 55 kcal; sugars 3 g; total fat 3.4 g; saturated fat 2.2 g; trans fat 0 g; protein 5 g; calcium 190 mg. Product identity is user-confirmed; the crop shows manufacturer and nutrition. Lactose is labeled 0 g per 100 mL; no analytical residual threshold established.
+- S17: Namyang GT, 200-mL serving divided by two: 65 kcal; sugars 4.5 g; total fat 4 g; saturated fat 2.5 g; trans fat 0 g; protein 3 g; calcium 100 mg per 100 mL. Baseline saturated fat 2.3 g is superseded.
+- S18: High-calcium milk selected as the shown 930-mL product. Explicit 100-mL table: 70 kcal; sugars 5 g; total fat 4 g; saturated fat 2.5 g; trans fat 0 g; protein 3 g; calcium 225 mg. Historical alternate tables remain preserved.
+- All 11 selected products now have evidence for seven compared nutrient fields, with Maeil Original trans fat retained as <0.25 g rather than an exact number.
+- Remaining limitations: all baseline prices lack comparable purchasing evidence; added sugars and most barcodes remain unknown; lactose thresholds, source-image dates and historical rename equivalence are not independently established. App integration remains pending.
+- Checked original baselines were preserved, 11 IDs remain present, all canonical bases are 100 mL, conversions match source bases, and evidence images are retained with hashes.
+
 ## Follow-up: user product clarification and label image
 
 This update supersedes the original unresolved Maeil and Brown rows below. The original comparison is retained as audit history.

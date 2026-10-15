@@ -1,5 +1,8 @@
 # Product Data and Verification
 
+> Latest data update (2026-10-15): all 11 selected products have source-supported nutrition profiles per 100 mL, including the Maeil Original trans-fat bound. User label images resolved GT, Maeil Protein and the selected 930-mL high-calcium product. Prices remain unverified; app integration is pending. See the [current nutrient table](NUTRIENTS_PER_100ML.md). Earlier audit counts below describe the initial review.
+
+
 The current app still uses its original hard-coded catalog in index.html. The first [structured audit](product-verification-2026-10-15.json) is now available, with its [findings and limits](../results/2026-10-15-product-data-audit.md). It is not connected to the app and is not a fully verified replacement catalog. Six records match five nutrient fields; one requires basis clarification; four lack sufficient nutrient evidence. All baseline prices remain unverified. Null means unknown; source IDs and original values are retained.
 
 For each product, create a record using the fields below. Use manufacturer information or a current package label where available. Do not invent values to fill gaps.
