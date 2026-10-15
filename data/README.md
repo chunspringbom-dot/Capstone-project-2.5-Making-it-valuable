@@ -42,3 +42,7 @@ If the basis is unknown or incompatible, mark the derived value unavailable.
 ## Public repository boundary
 
 Store product evidence and non-identifying aggregate research data here. Keep participant identities, consent records, private health information, and identifiable raw feedback outside this public repository.
+
+## Retail price collection
+
+[2026-10-15 retail observations](RETAIL_PRICES_2026-10-15.md) cover all 11 products with pack sizes, item prices per 100 mL, source links and shipping/eligibility limits. These dated offers do not validate the old baseline prices and are not yet connected to app scoring.
