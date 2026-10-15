@@ -1,7 +1,7 @@
 {
   "audit_date": "2026-10-15",
   "baseline_commit": "3d1fcafd4eb3de17a0bbc839c92907bfaf912f70",
-  "scope": "All 11 baseline products reviewed; six match five baseline nutrient fields and have separate official total/saturated/trans-fat values. One requires basis clarification; four have unresolved nutrient evidence. Canonical nutrient objects uniformly use 100 mL; null is unknown. Original source tables retain their original bases. App unchanged.",
+  "scope": "All 11 baseline products reviewed. Six original profiles match; Royal Jersey manufacturer nutrition accepted with user-confirmed rename; Maeil Original 3.4% 200 mL accepted from user-supplied label. Two lack nutrition panels and one requires package/basis clarification. All canonical nutrients use 100 mL.",
   "field_mapping": {
     "cal": "energy_kcal",
     "sugar": "total_sugars_g",
@@ -94,9 +94,9 @@
     },
     "S11": {
       "publisher": "Seoul Milk",
-      "url": "https://m.seoulmilk.co.kr/mobile/product/product_view.sm?gubun=&nmNo=10000000000458&page=1&subname=P0",
+      "url": "https://www.seoulmilk.co.kr/enterprise/product/product_view.sm?nmNo=10000000000458",
       "product_name": "로얄 저지밀크",
-      "evidence": "Search located a related Jersey milk product with a different name. Page retrieval failed; no nutrition accepted and no equivalence to Brown Jersey established.",
+      "evidence": "Manufacturer Royal Jersey Milk 750 mL page retrieved successfully; nutrition table explicitly per 100 mL. Product identity linked to baseline by user-reported rename (S15).",
       "access_date": "2026-10-15",
       "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
     },
@@ -115,6 +115,33 @@
       "evidence": "Different nonfat-and-calcium product, 900 mL. Calcium is 120 mg per 100 mL, rather than plain nonfat milk 100 mg; excluded as a replacement for baseline nonfat.",
       "access_date": "2026-10-15",
       "method": "AI-assisted manufacturer web-source desk review; not physical-package inspection"
+    },
+    "S14": {
+      "publisher": "Maeil Dairies (label image supplied by user)",
+      "product_name": "매일우유 오리지널 3.4% 200mL",
+      "evidence_path": "data/evidence/maeil-original-3.4-200ml-label.png",
+      "sha256": "763f2c061f0651e350d384cc7516cbb94e104c0890d2d5964c287de1ce9156c8",
+      "access_date": "2026-10-15",
+      "method": "Visual transcription of uploaded label image; user confirms intended school product and corrects earlier 3.6% statement. Not inspection of a physical carton.",
+      "basis_ml": 200,
+      "label_values": {
+        "energy_kcal": 120,
+        "total_sugars_g": 9,
+        "total_fat_g": 6.8,
+        "saturated_fat_g": 4,
+        "protein_g": 6,
+        "calcium_mg": 200
+      },
+      "trans_fat_label": {
+        "operator": "<",
+        "amount_g": 0.5,
+        "basis_ml": 200
+      }
+    },
+    "S15": {
+      "publisher": "User clarification",
+      "access_date": "2026-10-15",
+      "evidence": "User confirms Brown Jersey Milk is Seoul Milk and was recently renamed Royal Jersey Milk. Rename history is user-reported; current Royal Jersey nutrition is independently sourced from S11."
     }
   },
   "products": [
@@ -235,26 +262,35 @@
       "added_sugars_g": null,
       "price_verification": "baseline price unverified: no source, date or purchased volume",
       "nutrition_per_100ml": {
-        "energy_kcal": null,
-        "total_sugars_g": null,
-        "total_fat_g": null,
-        "saturated_fat_g": null,
+        "energy_kcal": 60,
+        "total_sugars_g": 4.5,
+        "total_fat_g": 3.4,
+        "saturated_fat_g": 2,
         "trans_fat_g": null,
-        "protein_g": null,
-        "calcium_mg": null
+        "protein_g": 3,
+        "calcium_mg": 100
       },
       "source_ids": [
-        "S09",
-        "S10"
+        "S14"
       ],
       "lactose_free_claim": null,
       "lactose_processing_evidence": null,
-      "status": "exact_variant_and_nutrition_unresolved",
-      "note": "Refrigerated large-format milk and Original variants found; do not substitute a 200-mL UHT product for an unspecified baseline variant.",
+      "status": "label_image_nutrition_transcribed",
+      "note": "User confirms exact school product is 3.4%, not earlier 3.6%. Original baseline retained as history. Trans fat is a strict upper bound, not zero or an exact amount.",
       "nutrition_basis": {
         "amount": 100,
         "unit": "mL"
-      }
+      },
+      "name": "매일우유 오리지널 3.4% 200mL",
+      "manufacturer": "Maeil Dairies",
+      "package_volume_ml": 200,
+      "nutrition_bounds_per_100ml": {
+        "trans_fat_g": {
+          "operator": "<",
+          "value": 0.25
+        }
+      },
+      "normalization_note": "All 200-mL label amounts divided by two. Null trans_fat_g is represented by the known bound in nutrition_bounds_per_100ml, not missing evidence."
     },
     {
       "id": "lowfat",
@@ -588,25 +624,32 @@
       "added_sugars_g": null,
       "price_verification": "baseline price unverified: no source, date or purchased volume",
       "nutrition_per_100ml": {
-        "energy_kcal": null,
-        "total_sugars_g": null,
-        "total_fat_g": null,
-        "saturated_fat_g": null,
-        "trans_fat_g": null,
-        "protein_g": null,
-        "calcium_mg": null
+        "energy_kcal": 80,
+        "total_sugars_g": 5,
+        "total_fat_g": 5,
+        "saturated_fat_g": 3.3,
+        "trans_fat_g": 0,
+        "protein_g": 4,
+        "calcium_mg": 140
       },
       "source_ids": [
-        "S11"
+        "S11",
+        "S15"
       ],
       "lactose_free_claim": null,
       "lactose_processing_evidence": null,
-      "status": "exact_variant_and_nutrition_unresolved",
-      "note": "Brown Jersey baseline name was not matched to an exact manufacturer nutrition table; related Royal Jersey is not a verified substitute.",
+      "status": "manufacturer_nutrition_user_confirmed_identity",
+      "note": "Current Royal Jersey manufacturer table accepted. Former Brown name linked by user confirmation; rename date and unchanged historical formulation not independently verified.",
       "nutrition_basis": {
         "amount": 100,
         "unit": "mL"
-      }
+      },
+      "name": "서울우유 로얄 저지밀크",
+      "aliases": [
+        "브라운 저지밀크"
+      ],
+      "manufacturer": "Seoul Milk",
+      "package_volume_ml": 750
     },
     {
       "id": "calcium",

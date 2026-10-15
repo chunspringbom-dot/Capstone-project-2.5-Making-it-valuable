@@ -1,6 +1,16 @@
 # Manufacturer-source product data audit — October 15, 2026
 
-## Outcome
+## Follow-up: user product clarification and label image
+
+This update supersedes the original unresolved Maeil and Brown rows below. The original comparison is retained as audit history.
+
+- Maeil: user corrected 3.6% to **Original 3.4%, 200 mL** and supplied a readable label image (S14). Per 100 mL: 60 kcal, sugars 4.5 g, total fat 3.4 g, saturated fat 2 g, protein 3 g, calcium 100 mg; trans fat **<0.25 g**. The strict bound is stored separately from exact numeric values. Baseline estimates are preserved, not reused.
+- Royal Jersey: user confirmed Seoul Milk and reported the Brown-to-Royal rename (S15). The current manufacturer's Royal Jersey 750-mL page was retrieved successfully (S11). Per 100 mL: 80 kcal, sugars 5 g, total fat 5 g, saturated fat 3.3 g, trans fat 0 g, protein 4 g, calcium 140 mg. The rename history is user-reported rather than independently established.
+- Remaining nutrition gaps: GT (exact panel missing), Maeil Protein (exact panel missing), high-calcium milk (energy and trans-fat package/basis discrepancy).
+- All 11 baseline prices remain unverified; barcodes and added sugars remain unknown. Residual lactose thresholds have not been established.
+- The [current comparison](../data/NUTRIENTS_PER_100ML.md) and structured JSON reflect this follow-up. App integration is still pending.
+
+## Original audit outcome
 
 Reviewed all 11 baseline records. Six match all five stored nutrient values against manufacturer tables; one requires package/basis clarification; four lack sufficient exact-variant nutrient evidence. **This does not mean that six complete product records are verified:** prices, barcodes, added sugars, and residual lactose thresholds remain unverified unless explicitly stated.
 
