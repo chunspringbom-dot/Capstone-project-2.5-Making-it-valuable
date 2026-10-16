@@ -145,6 +145,14 @@
   .divider { height: 1px; background: var(--border); margin: 20px 0; }
   .mb12 { margin-bottom: 12px; }
   .mb20 { margin-bottom: 20px; }
+
+  .shop-block { margin-top:10px; font-size:13px; line-height:1.65; color:var(--sub); overflow-wrap:anywhere; }
+  .shop-price { color:var(--text); font-weight:700; }
+  .buy-link { display:inline-block; padding:8px 12px; margin-top:6px; border:1px solid var(--accent); border-radius:8px; color:var(--accent); text-decoration:none; }
+  .buy-link:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
+  .top3-info, .rank-info { min-width:0; }
+  .top3-name, .rank-name { white-space:normal; overflow:visible; }
+  .shop-note { font-size:12px; }
 </style>
 </head>
 <body>
@@ -187,11 +195,11 @@
     <button class="btn-back" onclick="goScreen('s-home')">← 홈으로</button>
     <div class="page-title">🎯 선호도 추천</div>
     <div class="page-sub">설정한 조건 기준으로 가장 잘 맞는 우유예요</div>
-    <div id="rec-result"></div>
+    <div class="info-box">영양정보·비교 가격은 100mL 기준입니다. 가격을 반영하면 SSG.COM에서 확인한 상품만 순위에 포함해요. 배송비·카드·회원 할인 제외 · 조회 2026-10-16. 판매자별 배송 조건과 현재 가격은 구매 페이지에서 확인하세요.</div><div id="rec-result"></div>
     <div class="divider"></div>
-    <h3>전체 순위</h3>
+    <h3>비교 순위</h3>
     <div class="card" style="padding:8px 18px;">
-      <div id="rec-rank"></div>
+      <div id="rec-rank"></div><div id="rec-other"></div>
     </div>
     <div style="margin-top:16px;">
       <button class="btn btn-outline" onclick="goScreen('s-home')">← 설정 변경하러 가기</button>
@@ -234,7 +242,7 @@
         <span id="sr-badge" class="score-badge">—</span>
       </div>
       <div id="sr-warns"></div>
-      <div class="stat-grid" id="sr-stats"></div>
+      <div class="shop-note" id="sr-basis">영양정보 100mL 기준</div><div class="stat-grid" id="sr-stats"></div><div id="sr-shop"></div>
     </div>
     <h3>다른 우유와 비교</h3>
     <div class="card" style="padding:8px 18px;">
@@ -247,28 +255,17 @@
 
 </div>
 
+<script src="catalog.js"></script>
 <script>
 // ── DB ──────────────────────────────────────────────
-const DB = [
-  { id:'seoulna',   name:'서울우유 나100%',         cal:70,   sugar:5,   fat:2.5, protein:3,   calcium:100, lacto:false, price:1630 },
-  { id:'namyang',   name:'남양 맛있는우유 GT',        cal:65,   sugar:4.5, fat:2.3, protein:3,   calcium:100, lacto:false, price:1620 },
-  { id:'maeil',     name:'매일우유',                 cal:65,   sugar:5,   fat:2.3, protein:3,   calcium:100, lacto:false, price:1590 },
-  { id:'lowfat',    name:'나100% 저지방',             cal:40,   sugar:5,   fat:0.6, protein:3,   calcium:100, lacto:false, price:1610 },
-  { id:'comfort',   name:'내 속이 편안한 우유',        cal:65,   sugar:3.5, fat:2.5, protein:3,   calcium:100, lacto:true,  price:1715 },
-  { id:'nonfat',    name:'서울우유 무지방',            cal:30,   sugar:5,   fat:0,   protein:3,   calcium:100, lacto:false, price:1735 },
-  { id:'hipro',     name:'고단백저지방 서울우유',      cal:50,   sugar:5,   fat:0.6, protein:5.5, calcium:180, lacto:false, price:1805 },
-  { id:'sokpyun',   name:'속편한우유 저지방',          cal:40,   sugar:5,   fat:0.6, protein:3,   calcium:100, lacto:true,  price:1655 },
-  { id:'brown',     name:'브라운 저지밀크',            cal:80,   sugar:5,   fat:3.3, protein:4,   calcium:140, lacto:false, price:2605 },
-  { id:'calcium',   name:'뼈에 쏙쏙 고칼슘우유',      cal:67.5, sugar:5,   fat:2.5, protein:3,   calcium:225, lacto:false, price:1580 },
-  { id:'digest',    name:'소화가 잘되는 우유 단백질',  cal:55,   sugar:4.5, fat:1.3, protein:4.5, calcium:135, lacto:true,  price:2085 },
-];
+// Product catalog is generated from source-backed data.
 
 // ── PREFS ──────────────────────────────────────────
 const PREFS = [
   { id:'lacto',   label:'락토프리 필요',   hint:'유당 불내증이 있어요',      weight:50 },
   { id:'protein', label:'고단백 선호',     hint:'단백질 4g 이상',            weight:20 },
   { id:'sugar',   label:'저당 선호',       hint:'당 4g 이하',                weight:15 },
-  { id:'fat',     label:'저지방 선호',     hint:'포화지방 1g 이하',          weight:15 },
+  { id:'fat',     label:'낮은 포화지방 선호',     hint:'포화지방 1g 이하',          weight:15 },
   { id:'cal',     label:'저칼로리 선호',   hint:'칼로리 45kcal 이하',        weight:10 },
   { id:'calcium', label:'고칼슘 선호',     hint:'칼슘 130mg 이상',           weight:15 },
 ];
@@ -298,17 +295,43 @@ function togglePref(id, containerId) {
 }
 
 // ── SCORE ──────────────────────────────────────────
+function money(n) { return Number.isFinite(n) ? Math.round(n).toLocaleString('ko-KR') + '원' : '미확인'; }
+function esc(v) { return String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function priceEligible(m) { return m.offer?.platform === 'SSG.COM' && m.offer.score_eligible && Number.isFinite(m.offer.unit_price_100ml); }
+function offerReason(m) {
+  if (m.offer?.status === 'sold_out') return '조회 시 품절 · 가격 순위 제외';
+  if (m.offer?.status === 'cached_reference') return '이전 수집 가격 · 가격 순위 제외';
+  return 'SSG 비교 가격 미확인 · 가격 순위 제외';
+}
+function shopBlock(m) {
+  const o = m.offer;
+  if (!o) return '<div class="shop-block">판매 구성·가격·구매 링크 미확인</div>';
+  const direct = o.url && /^https:\/\//.test(o.url);
+  return `<div class="shop-block"><div class="shop-price">100mL당 ${money(o.unit_price_100ml)}${priceEligible(m)?'':' (참고)'}</div>
+    <div>판매 구성: ${o.volume_ml}mL × ${o.count}개 · 총 ${money(o.price_krw)}</div>
+    <div>${esc(o.seller)} · ${o.checked_date} 조회</div><div class="shop-note">${esc(o.shipping)}</div>
+    ${priceEligible(m)?'':`<div class="shop-note">${offerReason(m)}</div>`}
+    ${direct?`<a class="buy-link" href="${esc(o.url)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" aria-label="${esc(m.name)} ${esc(o.seller)} 상품 보기 (새 창)">${o.status==='sold_out'?'재입고 확인':esc(o.seller)+' 상품 보러 가기'} ↗</a>`:'<span>정확한 상품 링크 확인 중</span>'}</div>`;
+}
+function rankedProducts(pw) {
+  return DB.filter(m => (!state.lacto || m.lacto) && (!pw || priceEligible(m)))
+    .map(m => ({m, s:score(m,pw)})).sort((a,b)=>b.s-a.s);
+}
 function score(m, priceW) {
+  if (priceW > 0 && !priceEligible(m)) return null;
   let s = 0, max = 0;
-  if (state.lacto)   { max+=50; if (m.lacto)         s+=50; }
-  if (state.protein) { max+=20; s += m.protein>=5?20:m.protein>=4?14:m.protein>=3.5?8:3; }
-  if (state.sugar)   { max+=15; s += m.sugar<=3.5?15:m.sugar<=4?10:m.sugar<=4.5?5:0; }
-  if (state.fat)     { max+=15; s += m.fat<=0.6?15:m.fat<=1.3?9:m.fat<=2?4:0; }
-  if (state.cal)     { max+=10; s += m.cal<=35?10:m.cal<=45?7:m.cal<=55?3:0; }
-  if (state.calcium) { max+=15; s += m.calcium>=200?15:m.calcium>=130?10:m.calcium>=110?5:0; }
-  if (priceW > 0)    { const pw=priceW*4; max+=pw; s+=m.price<=1620?pw:m.price<=1720?Math.round(pw*.65):m.price<=1900?Math.round(pw*.35):0; }
-  if (max === 0) return 65;
-  return Math.round(s / max * 100);
+  if (state.lacto)   { max+=50; if (m.lacto) s+=50; }
+  if (state.protein) { max+=20; if(Number.isFinite(m.protein)) s += m.protein>=5?20:m.protein>=4?14:m.protein>=3.5?8:3; }
+  if (state.sugar)   { max+=15; if(Number.isFinite(m.sugar)) s += m.sugar<=3.5?15:m.sugar<=4?10:m.sugar<=4.5?5:0; }
+  if (state.fat)     { max+=15; if(Number.isFinite(m.fat)) s += m.fat<=0.6?15:m.fat<=1.3?9:m.fat<=2?4:0; }
+  if (state.cal)     { max+=10; if(Number.isFinite(m.cal)) s += m.cal<=35?10:m.cal<=45?7:m.cal<=55?3:0; }
+  if (state.calcium) { max+=15; if(Number.isFinite(m.calcium)) s += m.calcium>=200?15:m.calcium>=130?10:m.calcium>=110?5:0; }
+  if (priceW > 0) {
+    const prices=DB.filter(priceEligible).map(x=>x.offer.unit_price_100ml);
+    const lo=Math.min(...prices), hi=Math.max(...prices), pw=priceW*4;
+    max+=pw; s+=pw*(hi===lo?1:Math.max(0,Math.min(1,(hi-m.offer.unit_price_100ml)/(hi-lo))));
+  }
+  return max===0?0:Math.round(s/max*100);
 }
 
 // ── SCREENS ────────────────────────────────────────
@@ -329,7 +352,7 @@ function goMode(mode) {
 // ── RECOMMEND ──────────────────────────────────────
 function renderRecommend() {
   const pw = parseInt(document.getElementById('pw').value);
-  const allScored = DB.map(m => ({ m, s: score(m, pw) })).sort((a,b) => b.s - a.s);
+  const allScored = rankedProducts(pw);
 
   // Top 3
   const medals = ['🥇','🥈','🥉'];
@@ -340,7 +363,7 @@ function renderRecommend() {
         <div class="top3-medal">${medals[i]}</div>
         <div class="top3-info">
           <div class="top3-name">${item.m.name}${item.m.lacto?'<span class="tag tag-lacto">락토프리</span>':''}</div>
-          <div class="top3-meta">칼로리 ${item.m.cal}kcal · 단백질 ${item.m.protein}g · 칼슘 ${item.m.calcium}mg · ₩${item.m.price.toLocaleString()}</div>
+          <div class="top3-meta">칼로리 ${item.m.cal}kcal · 단백질 ${item.m.protein}g · 칼슘 ${item.m.calcium}mg · 100mL 기준</div>${shopBlock(item.m)}
         </div>
         <div class="top3-score ${cls}">${item.s}%</div>
       </div>`;
@@ -356,7 +379,7 @@ function renderRecommend() {
         <div class="rank-num ${numCls}">${i+1}</div>
         <div class="rank-info">
           <div class="rank-name">${item.m.name}${item.m.lacto?'<span class="tag tag-lacto">락토프리</span>':''}</div>
-          <div class="rank-bar-wrap"><div class="rank-bar ${cls}" style="width:${item.s}%"></div></div>
+          <div class="rank-bar-wrap"><div class="rank-bar ${cls}" style="width:${item.s}%"></div></div>${shopBlock(item.m)}
         </div>
         <div style="display:flex; align-items:center; gap:6px;">
           <div class="rank-score" style="color:${item.s>=75?'var(--accent)':item.s>=45?'var(--yellow)':'var(--warn)'}">${item.s}%</div>
@@ -364,7 +387,9 @@ function renderRecommend() {
         </div>
       </div>`;
   }).join('');
-  document.getElementById('rec-rank').innerHTML = rankHtml;
+  document.getElementById('rec-rank').innerHTML = rankHtml || '<p>현재 조건으로 비교 가능한 상품이 없어요.</p>';
+  const other=DB.filter(m=>!allScored.some(x=>x.m.id===m.id));
+  document.getElementById('rec-other').innerHTML=other.length?'<h3>순위 밖 제품도 확인해 보세요</h3>'+other.map(m=>`<div class="card"><button class="btn btn-outline" onclick="showDetailFromDB('${m.id}')">${esc(m.name)} 상세</button>${state.lacto&&!m.lacto?'<p>락토프리 필요 조건에 맞지 않아요.</p>':''}${shopBlock(m)}</div>`).join(''):'';
 }
 
 // ── DETAIL (DB 항목) ───────────────────────────────
@@ -436,6 +461,7 @@ function manualLookup() {
   lookupBarcode(val);
 }
 
+function apiNumber(v) { return v!==null && v!=='' && v!==undefined && Number.isFinite(Number(v)) ? Number(v) : null; }
 async function lookupBarcode(code) {
   document.getElementById('scan-error').style.display = 'none';
   document.getElementById('scan-loading').style.display = 'block';
@@ -457,13 +483,13 @@ async function lookupBarcode(code) {
     const milk = {
       id: 'api_' + code,
       name: p.product_name_ko || p.product_name || '알 수 없는 제품',
-      cal:     Math.round(n['energy-kcal_100g'] || n['energy-kcal_serving'] || 0),
-      sugar:   parseFloat((n['sugars_100g'] || 0).toFixed(1)),
-      fat:     parseFloat((n['saturated-fat_100g'] || 0).toFixed(1)),
-      protein: parseFloat((n['proteins_100g'] || 0).toFixed(1)),
-      calcium: Math.round((n['calcium_100g'] || 0) * 1000),
+      cal:     apiNumber(n['energy-kcal_100g']),
+      sugar:   apiNumber(n['sugars_100g']),
+      fat:     apiNumber(n['saturated-fat_100g']),
+      protein: apiNumber(n['proteins_100g']),
+      calcium: apiNumber(n['calcium_100g']) === null ? null : apiNumber(n['calcium_100g']) * 1000,
       lacto:   false,
-      price:   0,
+      totalFat: apiNumber(n['fat_100g']), transFat: apiNumber(n['trans-fat_100g']), basis:'100g',
     };
 
     lastScreen = 's-scan';
@@ -476,21 +502,22 @@ async function lookupBarcode(code) {
 
 // ── SCAN RESULT ────────────────────────────────────
 function showScanResult(milk, fromApi, pw) {
-  const allScored = DB.map(m => ({ m, s: score(m, pw) })).sort((a,b) => b.s - a.s);
-  const myScore = score(milk, pw);
+  const allScored = rankedProducts(pw);
+  const myScore = fromApi || (state.lacto && !milk.lacto) ? null : score(milk, pw);
 
   document.getElementById('sr-title').textContent = milk.name;
   document.getElementById('sr-source').innerHTML = fromApi
-    ? '<div class="info-box">☁️ Open Food Facts DB에서 실시간으로 가져온 영양 정보예요</div>'
+    ? '<div class="info-box">Open Food Facts 원본 100g 기준 정보입니다. 100mL로 변환할 근거가 없어 추천 순위와 가격 비교에서 제외했어요.</div>'
     : '';
 
   // 점수
   const scoreEl = document.getElementById('sr-score');
-  scoreEl.textContent = myScore + '%';
+  scoreEl.textContent = myScore === null ? '비교 제외' : myScore + '%';
   scoreEl.className = 'score-big ' + (myScore>=75?'high':myScore>=45?'mid':'low');
 
   const badge = document.getElementById('sr-badge');
-  if (myScore>=75){ badge.textContent='잘 맞아요 ✓'; badge.className='score-badge badge-ok'; }
+  if (myScore===null){ badge.textContent='조건·가격 확인 필요'; badge.className='score-badge badge-mid'; }
+  else if (myScore>=75){ badge.textContent='잘 맞아요 ✓'; badge.className='score-badge badge-ok'; }
   else if (myScore>=45){ badge.textContent='보통이에요'; badge.className='score-badge badge-mid'; }
   else { badge.textContent='맞지 않아요'; badge.className='score-badge badge-bad'; }
 
@@ -503,19 +530,18 @@ function showScanResult(milk, fromApi, pw) {
   document.getElementById('sr-warns').innerHTML = warns;
 
   // 영양 스탯
+  const fmt=(v,u)=>Number.isFinite(v)?v+u:'미확인';
+  document.getElementById('sr-basis').textContent = fromApi?'영양정보 100g 기준 (부피 환산 안 됨)':'영양정보 100mL 기준';
   document.getElementById('sr-stats').innerHTML = [
-    [milk.cal + ' kcal', '칼로리'],
-    [milk.sugar + 'g',   '당'],
-    [milk.fat + 'g',     '포화지방'],
-    [milk.protein + 'g', '단백질'],
-    [milk.calcium + 'mg','칼슘'],
-    [milk.price > 0 ? '₩' + milk.price.toLocaleString() : '—', '가격(500ml)'],
-  ].map(([v,l]) => `<div class="stat-cell"><div class="stat-val">${v}</div><div class="stat-lbl">${l}</div></div>`).join('');
+    [fmt(milk.cal,' kcal'),'칼로리'], [fmt(milk.sugar,'g'),'당류'],
+    [fmt(milk.totalFat,'g'),'지방'], [fmt(milk.fat,'g'),'포화지방'],
+    [milk.transFatBound?milk.transFatBound.value+'g 미만':fmt(milk.transFat,'g'),'트랜스지방'],
+    [fmt(milk.protein,'g'),'단백질'],[fmt(milk.calcium,'mg'),'칼슘'],
+  ].map(([v,l])=>`<div class="stat-cell"><div class="stat-val">${v}</div><div class="stat-lbl">${l}</div></div>`).join('');
+  document.getElementById('sr-shop').innerHTML=shopBlock(milk);
 
   // 비교 순위 (로컬 DB + 현재 제품)
-  const withCurrent = fromApi
-    ? [...allScored, { m: milk, s: myScore }].sort((a,b) => b.s - a.s)
-    : allScored;
+  const withCurrent = allScored;
 
   const rankHtml = withCurrent.map((item, i) => {
     const isCur = item.m.id === milk.id;
@@ -533,7 +559,7 @@ function showScanResult(milk, fromApi, pw) {
             ${item.m.lacto?'<span class="tag tag-lacto">락토프리</span>':''}
             ${isCur?'<span class="tag tag-cur">현재</span>':''}
           </div>
-          <div class="rank-bar-wrap"><div class="rank-bar ${cls}" style="width:${item.s}%"></div></div>
+          <div class="rank-bar-wrap"><div class="rank-bar ${cls}" style="width:${item.s}%"></div></div>${shopBlock(item.m)}
         </div>
         <div style="display:flex;align-items:center;gap:6px;">
           <div class="rank-score" style="color:${item.s>=75?'var(--accent)':item.s>=45?'var(--yellow)':'var(--warn)'}">${item.s}%</div>

@@ -1,0 +1,38 @@
+const {chromium}=require('playwright');
+const fs=require('fs');
+const assert=require('node:assert/strict');
+(async()=>{
+ const browser=await chromium.launch({headless:true});
+ const page=await browser.newPage({viewport:{width:390,height:844}});
+ await page.route('https://**/*',route=>route.abort());
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('file://'+process.cwd()+'/index.html');
+ await page.evaluate(()=>goMode('recommend'));
+ assert.equal(await page.locator('#rec-rank > .rank-item').count(),6);
+ assert.equal(await page.locator('#rec-other > .card').count(),5);
+ assert.match(await page.locator('#rec-result').innerText(),/100mL당/);
+ assert.match(await page.locator('#rec-result').innerText(),/판매 구성: 1000mL × 2개 · 총 5,480원/);
+ const href=await page.locator('#rec-result .buy-link').first().getAttribute('href');
+ assert.equal(new URL(href).hostname,'www.ssg.com');
+ assert.equal(await page.locator('#rec-result .buy-link').first().getAttribute('target'),'_blank');
+ // Clicking a purchase link must not invoke its enclosing detail card.
+ await page.locator('#rec-result .buy-link').first().evaluate(el=>el.addEventListener('click',e=>e.preventDefault()));
+ await page.locator('#rec-result .buy-link').first().click();
+ assert.equal(await page.locator('#s-recommend').getAttribute('class'),'screen active');
+ await page.evaluate(()=>showDetailFromDB('maeil'));
+ assert.match(await page.locator('#sr-stats').innerText(),/0.25g 미만/);
+ assert.match(await page.locator('#sr-shop').innerText(),/200mL × 24개/);
+ assert.equal(await page.locator('#sr-score').innerText(),'비교 제외');
+ await page.evaluate(()=>{document.getElementById('pw').value=0;renderRecommend();goScreen('s-recommend');});
+ assert.equal(await page.locator('#rec-rank > .rank-item').count(),11);
+ await page.evaluate(()=>{document.getElementById('pw').value=2;state.lacto=true;renderRecommend();});
+ assert.equal(await page.locator('#rec-rank > .rank-item').count(),1);
+ assert.match(await page.locator('#rec-rank').innerText(),/단백질/);
+ const units=await page.evaluate(()=>DB.every(m=>Math.abs(m.offer.unit_price_100ml-m.offer.price_krw/(m.offer.volume_ml*m.offer.count)*100)<1e-8));assert(units);
+ assert.equal(await page.evaluate(()=>score({cal:null,sugar:null,fat:null,protein:null,calcium:null},2)),null);
+ await page.evaluate(()=>{state.lacto=false;renderRecommend();});
+ assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+ await page.screenshot({path:'/tmp/milk-shopping-mobile.png',fullPage:true});
+ assert.deepEqual(errors,[]);
+ await browser.close();console.log('PASS: units, 6 ranked / 5 reference offers, links, click isolation, trans-fat bound, missing price, lactose filter, mobile width; no runtime errors.');
+})().catch(e=>{console.error(e);process.exit(1)});
